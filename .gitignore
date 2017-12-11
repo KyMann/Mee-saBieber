@@ -22,7 +22,7 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
-/src/main/java/com/KyMann/EmperorTrump/TwitterKeys.java
+/src/main/java/com/KyMann/MeesaBieber/TwitterKeys.java
 .mvn/
 mvnw
 mvnw.cmd

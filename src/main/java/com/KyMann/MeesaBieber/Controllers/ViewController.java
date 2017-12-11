@@ -1,6 +1,6 @@
-package com.KyMann.EmperorTrump.Controllers;
+package com.KyMann.MeesaBieber.Controllers;
 
-import com.KyMann.EmperorTrump.Models.data.EmperorTweetsDao;
+import com.KyMann.MeesaBieber.Models.data.DatabaseTweetsDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class ViewController {
 
     @Autowired
-    private EmperorTweetsDao emperorTweetsDao;
+    private DatabaseTweetsDao databaseTweetsDao;
 
     @RequestMapping(value="watch", method = RequestMethod.GET)
     public String viewtweets(Model model) {
 
-        model.addAttribute("tweets", emperorTweetsDao.findAll());
+        model.addAttribute("tweets", databaseTweetsDao.findAll());
 
         return "watch.html";
     }

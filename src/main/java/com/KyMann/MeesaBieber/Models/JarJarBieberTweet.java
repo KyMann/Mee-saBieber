@@ -1,4 +1,4 @@
-package com.KyMann.EmperorTrump.Models;
+package com.KyMann.MeesaBieber.Models;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-public class EmperorTweet {
+public class JarJarBieberTweet {
 
     @NotNull
     @Size(min=1, max=240)
@@ -21,12 +21,12 @@ public class EmperorTweet {
     @Id
     private int id;
 
-    public EmperorTweet() {}
+    public JarJarBieberTweet() {}
 
-    public EmperorTweet(String aTweet, int aChanges) {
+    public JarJarBieberTweet(String aTweet, int aChanges) {
         tweet = aTweet;
         changes = aChanges;
-        approved = false;
+        approved = true;
     }
 
     public String getTweet() {

@@ -1,8 +1,8 @@
-package com.KyMann.EmperorTrump.Controllers;
+package com.KyMann.MeesaBieber.Controllers;
 
-import com.KyMann.EmperorTrump.Models.EmperorTweet;
-import com.KyMann.EmperorTrump.Models.data.EmperorTweetsDao;
-import com.KyMann.EmperorTrump.TwitterKeys;
+import com.KyMann.MeesaBieber.Models.JarJarBieberTweet;
+import com.KyMann.MeesaBieber.Models.data.DatabaseTweetsDao;
+import com.KyMann.MeesaBieber.TwitterKeys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
@@ -22,9 +22,11 @@ public class ScrapeTweetsController {
 
 
     boolean streamOn = false;
+    boolean approvalOn = false;
+
     @Autowired
-    EmperorTweetsDao emperorTweetsDao;
-    private static List<Status> trumpTweetsList = new ArrayList<Status>();
+    DatabaseTweetsDao databaseTweetsDao;
+    private static List<Status> bieberTweetsList = new ArrayList<Status>();
 
     @PostConstruct
     @Scheduled(fixedRate=86400000) //1 day
@@ -40,8 +42,8 @@ public class ScrapeTweetsController {
         TwitterFactory tf = new TwitterFactory(configurationBuilder.build());
         twitter4j.Twitter twitter = tf.getInstance();
 
-        //EmperorControl object needed to run conversion methods
-        EmperorControl empTrumpTranslator = new EmperorControl();
+        //StringManipulatorController object needed to run conversion methods
+        StringManipulatorController meeSaBiebTranslator = new StringManipulatorController();
 
         //twitter streaming input
         if (streamOn) {
@@ -50,7 +52,7 @@ public class ScrapeTweetsController {
             twitterStream.setOAuthAccessToken(new AccessToken(TwitterKeys.accessTokenKey, TwitterKeys.accessTokenSecret));
             StatusListener listener = new StatusListener() {
                 public void onStatus(Status status) {
-                    trumpTweetsList.add(status);
+                    bieberTweetsList.add(status);
                 }
 
                 public void onStallWarning(StallWarning stallWarning) {
@@ -79,35 +81,35 @@ public class ScrapeTweetsController {
         //pageNum controls pages back into tweet history, might need to increment at some point, certain how to prevent repeats as tweets move back through the list
         //count is how many tweets per page, max 100
         //old tweets database built when server is started, //TODO: check to keep out duplicates when server is restarted
-        if (trumpTweetsList.isEmpty()) {
+        if (bieberTweetsList.isEmpty()) {
             for (int pageNum = 1; pageNum < 2; pageNum++) {
-                Paging paging = new Paging(pageNum, 12); //Trump tweets 12 times a day
+                Paging paging = new Paging(pageNum, 12);
                 //.get is past tweets
-                trumpTweetsList = twitter.getUserTimeline("@realDonaldTrump", paging);
+                bieberTweetsList = twitter.getUserTimeline("@justinbieber", paging);
             }
         }
 
-        for (Status s : trumpTweetsList) {
+        for (Status s : bieberTweetsList) {
             //this runs the converter - DOES NOT RETURN STRING BUT OBJECT
-            EmperorTweet empTweet = empTrumpTranslator.insertEmperorWords(s.getText());
-            if (empTweet.getChanges() != 0) {
+            JarJarBieberTweet jarbTweet = meeSaBiebTranslator.translateTweet(s.getText());
+            if (jarbTweet.getChanges() != 0) {
                 //System.out.println(s.getUser().getName() + " " + s.getText());
-                System.out.println(empTweet.getTweet() + ", " +  String.valueOf(empTweet.getChanges()));
+                System.out.println(jarbTweet.getTweet() + ", " +  String.valueOf(jarbTweet.getChanges()));
 
-                emperorTweetsDao.save(empTweet);
+                databaseTweetsDao.save(jarbTweet);
             }
         }
-        trumpTweetsList.clear();
+        bieberTweetsList.clear();
     }
 
     @Scheduled(fixedRate=7200000)
     public void pushTweet (Twitter twitter){
         //this is it's own method, called by a timer object in main
-        for (EmperorTweet tweet : emperorTweetsDao.findAll()) {
+        for (JarJarBieberTweet tweet : databaseTweetsDao.findAll()) {
             if (tweet.isApproved()) {
                 try {
                     twitter.updateStatus(tweet.getTweet());
-                    emperorTweetsDao.delete(tweet.getId());
+                    databaseTweetsDao.delete(tweet.getId());
                 } catch (TwitterException e) {
                     System.err.println("Error occurred while posting status!");
                 }

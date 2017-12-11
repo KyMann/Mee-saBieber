@@ -1,6 +1,6 @@
-package com.KyMann.EmperorTrump.Models.data;
+package com.KyMann.MeesaBieber.Models.data;
 
-import com.KyMann.EmperorTrump.Models.EmperorTweet;
+import com.KyMann.MeesaBieber.Models.JarJarBieberTweet;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,5 +12,5 @@ import javax.transaction.Transactional;
 
 @Repository
 @Transactional
-public interface EmperorTweetsDao extends CrudRepository<EmperorTweet, Integer> {
+public interface DatabaseTweetsDao extends CrudRepository<JarJarBieberTweet, Integer> {
 }
