@@ -1,7 +1,6 @@
 package com.KyMann.MeesaBieber.Controllers;
 
-import com.KyMann.MeesaBieber.Models.data.DatabaseTweetsDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.KyMann.MeesaBieber.Models.data.JarJarBiebPseudoDatabase;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/")
 public class ViewController {
 
-    @Autowired
-    private DatabaseTweetsDao databaseTweetsDao;
+    //@Autowired
+    //private DatabaseTweetsDao databaseTweetsDao;
+    JarJarBiebPseudoDatabase databaseTweetsDao = JarJarBiebPseudoDatabase.getInstance();
 
     @RequestMapping(value="watch", method = RequestMethod.GET)
     public String viewtweets(Model model) {

@@ -1,9 +1,8 @@
 package com.KyMann.MeesaBieber.Controllers;
 
 import com.KyMann.MeesaBieber.Models.JarJarBieberTweet;
-import com.KyMann.MeesaBieber.Models.data.DatabaseTweetsDao;
+import com.KyMann.MeesaBieber.Models.data.JarJarBiebPseudoDatabase;
 import com.KyMann.MeesaBieber.TwitterKeys;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import twitter4j.*;
@@ -24,8 +23,9 @@ public class ScrapeTweetsController {
     boolean streamOn = false;
     boolean approvalOn = false;
 
-    @Autowired
-    DatabaseTweetsDao databaseTweetsDao;
+    //@Autowired
+    //DatabaseTweetsDao databaseTweetsDao;
+    JarJarBiebPseudoDatabase databaseTweetsDao = JarJarBiebPseudoDatabase.getInstance();
     private static List<Status> bieberTweetsList = new ArrayList<Status>();
 
     @PostConstruct
